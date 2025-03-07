@@ -29,8 +29,11 @@ public class MessageService {
     }
 
     public Message insertMessage(Message message) {
+        AccountService accountService = new AccountService();
+
         if (message.getMessage_text().length() <= 255 &&
-            message.getMessage_text() != "") {
+            message.getMessage_text() != "" &&
+            accountService.getAccountByUserID(message.getPosted_by()) != null) {
                 return messageDAO.insertMessage(message);
             }
 
