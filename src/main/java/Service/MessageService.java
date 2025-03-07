@@ -32,7 +32,7 @@ public class MessageService {
         AccountService accountService = new AccountService();
 
         if (message.getMessage_text().length() <= 255 &&
-            message.getMessage_text() != "" &&
+            !message.getMessage_text().equals("") &&
             accountService.getAccountByUserID(message.getPosted_by()) != null) {
                 return messageDAO.insertMessage(message);
             }
@@ -50,13 +50,13 @@ public class MessageService {
         return messageDAO.deleteMessage(message);
     }
 
-    public Message updateMessage(int id) {
+    public Message updateMessage(int id, String messageText) {
         Message message = messageDAO.getMessageById(id);
 
-        if (message == null) {
+        if (message == null || messageText.equals("")) {
             return null;
         }
 
-        return messageDAO.updateMessage(message);
+        return messageDAO.updateMessage(id, messageText);
     }
 }

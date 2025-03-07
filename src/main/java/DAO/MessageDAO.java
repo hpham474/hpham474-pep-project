@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,14 +89,20 @@ public class MessageDAO {
         Connection connection = ConnectionUtil.getConnection();
         try {
             String sql = "INSERT INTO message (posted_by, message_text, time_posted_epoch) VALUES (?, ?, ?);";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             preparedStatement.setInt(1, message.getPosted_by());
             preparedStatement.setString(2, message.getMessage_text());
             preparedStatement.setLong(3, message.getTime_posted_epoch());
 
             preparedStatement.executeUpdate();
-            return message;
+
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+
+            rs.next();
+            int key = rs.getInt("message_id");
+
+            return this.getMessageById(key);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -118,17 +125,17 @@ public class MessageDAO {
         return null;
     }
 
-    public Message updateMessage(Message message) {
+    public Message updateMessage(int id, String messageText) {
         Connection connection = ConnectionUtil.getConnection();
         try {
             String sql = "UPDATE message SET message_text = ? WHERE message_id = ?;";
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1, message.getMessage_text());
-            preparedStatement.setInt(2, message.getMessage_id());
+            preparedStatement.setString(1, messageText);
+            preparedStatement.setInt(2, id);
 
             preparedStatement.executeUpdate();
-            return message;
+            return this.getMessageById(id);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

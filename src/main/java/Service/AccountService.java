@@ -15,18 +15,25 @@ public class AccountService {
     }
 
     public Account registerUser(Account account) {
-        if (account.getUsername() != "" &&
+        if (!account.getUsername().equals("") &&
             account.getPassword().length() >= 4 && 
             accountDAO.getAccountByUser(account.getUsername()) == null) {
-                return accountDAO.insertAccount(account);
+                accountDAO.insertAccount(account);
+                return accountDAO.getAccountByUser(account.getUsername());
             }
 
         return null;
     }
 
     public Account loginUser(Account account) {
-        if (accountDAO.getAccountByUser(account.getUsername()).getPassword() == account.getPassword()) {
-            return account;
+        Account attemptedAccount = accountDAO.getAccountByUser(account.getUsername());
+
+        if (attemptedAccount == null) {
+            return null;
+        }
+
+        if (attemptedAccount.getPassword().equals(account.getPassword())) {
+            return attemptedAccount;
         }
 
         return null;
