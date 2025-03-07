@@ -32,4 +32,8 @@ public class AccountService {
         return null;
     }
 
+    public Account getAccountByUserID(int id) {
+        return accountDAO.getAccountByUserID(id);
+    }
+
 }
