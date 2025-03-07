@@ -37,11 +37,23 @@ public class MessageService {
         return null;
     }
 
-    public Message deleteMessage(int id, Message message) {
-        return messageDAO.deleteMessage(id, message);
+    public Message deleteMessage(int id) {
+        Message message = messageDAO.getMessageById(id);
+
+        if (message == null) {
+            return null;
+        }
+
+        return messageDAO.deleteMessage(message);
     }
 
-    public Message updateMessage(int id, Message message) {
-        return messageDAO.updateMessage(id, message);
+    public Message updateMessage(int id) {
+        Message message = messageDAO.getMessageById(id);
+
+        if (message == null) {
+            return null;
+        }
+
+        return messageDAO.updateMessage(message);
     }
 }

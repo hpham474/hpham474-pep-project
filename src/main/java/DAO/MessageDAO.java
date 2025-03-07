@@ -102,7 +102,7 @@ public class MessageDAO {
         return null;
     }
 
-    public Message deleteMessage(int id, Message message) {
+    public Message deleteMessage(Message message) {
         Connection connection = ConnectionUtil.getConnection();
         try {
             String sql = "DELETE FROM message WHERE message_id = ?;";
@@ -118,7 +118,7 @@ public class MessageDAO {
         return null;
     }
 
-    public Message updateMessage(int id, Message message) {
+    public Message updateMessage(Message message) {
         Connection connection = ConnectionUtil.getConnection();
         try {
             String sql = "UPDATE message SET message_text = ? WHERE message_id = ?;";
